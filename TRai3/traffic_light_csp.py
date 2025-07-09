@@ -11,6 +11,7 @@ class TrafficLightCSP:
         self.ns_lanes = ['-gneE0_0', '-gneE0_1', '-gneE0_2', '-gneE2_0', '-gneE2_1', '-gneE2_2']
         self.ew_lanes = ['-gneE1_0', '-gneE1_1', '-gneE1_2', '-gneE3_0', '-gneE3_1', '-gneE3_2']
         
+        # SET LAMPU LALU LINTAS
         self.min_green = 20
         self.max_green = 60
         self.yellow_time = 5
@@ -22,19 +23,21 @@ class TrafficLightCSP:
         self.vehicle_travel_times = {}
         self.vehicle_departure_times = {}
         
+        # VARIABEL UNTUK MENAMPILKAN LOG
         self.current_ns_waiting_time = 0.0
         self.current_ew_waiting_time = 0.0
         self.current_ns_queue_length = 0
         self.current_ew_queue_length = 0
         
+        # STEP YANG BISA DISESUAIKAN    <================================================================================
         self.max_simulation_steps = 500 
 
     def _update_vehicle_metrics(self):
-        """Updates vehicle departure and travel times."""
         for veh_id in traci.vehicle.getIDList():
             if veh_id not in self.vehicle_departure_times:
                 self.vehicle_departure_times[veh_id] = self.step
 
+        # MENGHITUNG KENDARAAN YANG SAMPAI KETUJUAN
         arrived_vehicles = traci.simulation.getArrivedIDList()
         for veh_id in arrived_vehicles:
             if veh_id in self.vehicle_departure_times:
@@ -43,9 +46,6 @@ class TrafficLightCSP:
                 del self.vehicle_departure_times[veh_id]
 
     def _get_current_lane_metrics(self):
-        """
-        Collects real-time vehicle counts, queue lengths (halting vehicles), and average waiting times per lane.
-        """
         ns_queue = 0
         ew_queue = 0
         ns_waiting_sum = 0.0
@@ -74,11 +74,13 @@ class TrafficLightCSP:
         self.current_ew_queue_length = ew_queue
 
     def _run_phase(self, phase_duration, phase_id):
-        """Helper to run a traffic light phase and update metrics and log."""
         self.env.set_traffic_light_phase(phase_id, phase_duration)
         for _ in range(int(phase_duration)):
+
+            # BREAK KETIKA STEP MENCAPAI BATAS
             if self.step >= self.max_simulation_steps:
-                break 
+                break
+
             self.env.simulation_step()
             self._update_vehicle_metrics()
             
@@ -94,6 +96,8 @@ class TrafficLightCSP:
 
     def run(self):
         self.env.reset()
+
+        # MENULIS LOG HASIL PADA FILE
         with open('queue_length.txt', 'w') as f:
             f.write("step,total_halting_vehicles,total_waiting_time_step,ns_queue,ew_queue,ns_avg_wait_current,ew_avg_wait_current\n")
 
@@ -126,13 +130,18 @@ class TrafficLightCSP:
                 target_green_ns = max(self.min_green, min(target_green_ns, self.max_green))
                 target_green_ew = max(self.min_green, min(target_green_ew, self.max_green))
                 
+                # MEMILIH VARIABLE DALAM RANGE DI BAWAH INI
                 csp.addVariable('green_ns', range(max(self.min_green, target_green_ns - 10), min(self.max_green, target_green_ns + 10) + 1))
                 csp.addVariable('green_ew', range(max(self.min_green, target_green_ew - 10), min(self.max_green, target_green_ew + 10) + 1))
 
+                # DEBUGG BUGGG BUGGG BUGGG
+                print(range(max(self.min_green, target_green_ew - 10), min(self.max_green, target_green_ew + 10) + 1))
 
                 # KENDALA EXISTING:
                 csp.addConstraint(lambda ns, ew: ns + ew + 2 * self.yellow_time <= 120, ('green_ns', 'green_ew'))
                 
+                # PEMERIKSAAN KENDALA, JIKA TIDAK ADA KONTRADIKSI MAKA AKAN LANJUT MEMILIH VARIABLE
+                # JIKA TERJADI KONTRADIKSI, MAKA AKAN MUNDUR (BACKTRACK)
                 if self.current_ns_waiting_time > 0 and self.current_ew_waiting_time > 0:
                     if self.current_ns_waiting_time > self.current_ew_waiting_time * 1.5:
                         csp.addConstraint(lambda ns, ew: ns >= ew * 1.05, ('green_ns', 'green_ew'))
