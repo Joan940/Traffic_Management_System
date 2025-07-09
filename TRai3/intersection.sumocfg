@@ -1,0 +1,7 @@
+<configuration>
+    <input>
+       <net-file value="intersection.net.xml"/>
+       <route-files value="intersection.rou.xml"/>
+       <additional-files value="detector.add.xml"/>
+    </input>
+</configuration>
