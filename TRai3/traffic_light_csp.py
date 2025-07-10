@@ -197,11 +197,11 @@ class TrafficLightCSP:
                 avg_travel_time = total_travel_time / self.total_vehicles_departed if self.total_vehicles_departed > 0 else 0
                 throughput = self.total_vehicles_departed / self.step if self.step > 0 else 0
                 
-                print(f"\n--- Simulation Summary (CSP Adaptive Traffic Light More Balanced - V3) ---")
-                print(f"Simulation ended at step {self.step}. Total vehicles departed: {self.total_vehicles_departed}")
-                print(f"Total waiting time: {self.total_waiting_time:.2f}s, Average waiting time per vehicle: {avg_waiting_time:.2f}s")
-                print(f"Total travel time: {total_travel_time:.2f}s, Average travel time per vehicle: {avg_travel_time:.2f}s")
-                print(f"Throughput: {throughput:.4f} vehicles/step")
+                print(f"\n--- Simulation Summary ---")
+                print(f"Simulation selesai pada {self.step}. Total kendaraan yang muncul : {self.total_vehicles_departed}")
+                print(f"Total waiting time : {self.total_waiting_time:.2f}s, Rerata waktu tunggu per kendaraan : {avg_waiting_time:.2f}s")
+                print(f"Total waktu travel : {total_travel_time:.2f}s, Rerata waktu travel per kendaraan : {avg_travel_time:.2f}s")
+                print(f"Throughput : {throughput:.4f} vehicles/step")
             else:
                 print("No vehicles departed during the simulation.")
         except Exception as e:

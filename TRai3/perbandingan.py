@@ -42,7 +42,6 @@ static_summary = {
 }
 
 # --- 3. Buat Grafik Perbandingan Time Series ---
-
 plt.figure(figsize=(15, 10))
 
 # Plot Kepadatan Antrean (Halting Vehicles)
@@ -57,10 +56,6 @@ plt.grid(True, linestyle=':', alpha=0.6)
 plt.ylim(bottom=0) # Pastikan Y-axis mulai dari 0
 
 # Plot Waktu Tunggu Kumulatif (per langkah)
-# Note: total_waiting_time_step adalah waktu tunggu kumulatif dari semua kendaraan yang berhenti pada langkah itu.
-# Bukan waktu tunggu kumulatif sepanjang simulasi.
-# Jika ingin total kumulatif sepanjang simulasi, perlu dihitung ulang dari data per kendaraan.
-# Namun, untuk perbandingan dinamika per langkah, ini sudah cukup.
 plt.subplot(2, 1, 2) # 2 baris, 1 kolom, plot ke-2
 plt.plot(df_adaptive['step'], df_adaptive['total_waiting_time_step'], label='CSP Adaptif', color='blue', alpha=0.7)
 plt.plot(df_static['step'], df_static['waiting_time'], label='Statis', color='red', alpha=0.7, linestyle='--') # static log uses 'waiting_time'
@@ -70,11 +65,12 @@ plt.ylabel('Total Waktu Tunggu (detik) per Langkah')
 plt.legend()
 plt.grid(True, linestyle=':', alpha=0.6)
 plt.ylim(bottom=0)
+
+# Menyimpan grafik ke path yang diinginkan
 plt.tight_layout()
-plt.show()
+plt.savefig(r'C:\Users\LENOVO\AppData\Local\Programs\Python\Python311\Project\TRai3_Latest\TRai3\output_comparison_1.png')
 
 # --- 4. Buat Grafik Perbandingan Bar Chart untuk Metrik Kunci ---
-
 metrics = {
     'Total Kendaraan Berangkat': (csp_summary['Total vehicles departed'], static_summary['Total vehicles departed']),
     'Waktu Tunggu Rata-Rata per Kendaraan': (csp_summary['Average waiting time per vehicle'], static_summary['Average waiting time per vehicle']),
@@ -112,12 +108,12 @@ ax.set_xticks(x)
 ax.set_xticklabels(metric_names, rotation=20, ha='right')
 ax.legend()
 ax.grid(axis='y', linestyle=':', alpha=0.7)
-plt.tight_layout()
-plt.show()
 
+# Menyimpan grafik ke path yang diinginkan
+plt.tight_layout()
+plt.savefig(r'C:\Users\LENOVO\AppData\Local\Programs\Python\Python311\Project\TRai3_Latest\TRai3\output_comparison_2.png')
 
 # --- 5. Buat Grafik Perbandingan Waktu Tunggu Spesifik Jalur (Time Series) ---
-
 plt.figure(figsize=(15, 10))
 
 # Waktu Tunggu NS
@@ -141,8 +137,9 @@ plt.ylabel('Waktu Tunggu Rata-rata (detik)')
 plt.legend()
 plt.grid(True, linestyle=':', alpha=0.6)
 plt.ylim(bottom=0)
-plt.tight_layout()
-plt.show()
 
-print("\nGrafik perbandingan telah dibuat dan ditampilkan.")
-print("Periksa jendela pop-up grafik.")
+# Menyimpan grafik ke path yang diinginkan
+plt.tight_layout()
+plt.savefig(r'C:\Users\LENOVO\AppData\Local\Programs\Python\Python311\Project\TRai3_Latest\TRai3\output_comparison_3.png')
+
+print("\nGrafik perbandingan telah dibuat dan disimpan.")

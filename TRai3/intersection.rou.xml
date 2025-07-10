@@ -1,7 +1,7 @@
 <routes>
-    <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="5" maxSpeed="70"/>
-    <vType id="car2" accel="2.0" decel="4.0" sigma="0.6" length="5" maxSpeed="60"/>
-    <vType id="car3" accel="1.8" decel="3.5" sigma="0.7" length="5" maxSpeed="50"/>
+    <vType id="car" accel="2" decel="4" sigma="0.5" length="5" maxSpeed="60"/>
+    <vType id="car2" accel="2" decel="4" sigma="0.5" length="5" maxSpeed="60"/>
+    <vType id="car3" accel="2" decel="4" sigma="0.5" length="5" maxSpeed="60"/>
     <!-- NS: -gneE0 to gneE2 (north to south) -->
     <flow id="flow0" type="car" from="-gneE0" to="gneE2" begin="0.0" end="3600.0" vehsPerHour="200" departLane="random"/>
     <flow id="flow0_1" type="car" from="-gneE0" to="gneE2" begin="0.0" end="3600.0" vehsPerHour="200" departLane="random"/>
